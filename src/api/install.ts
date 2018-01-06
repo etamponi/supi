@@ -66,7 +66,7 @@ import thenify = require('thenify')
 import child_process = require('child_process')
 import {rebuild} from './rebuild';
 
-const execPromise = thenify(child_process.execFile)
+const execPromise = thenify(child_process.exec)
 
 export type InstalledPackages = {
   [name: string]: InstalledPackage
@@ -197,7 +197,7 @@ export async function install (maybeOpts?: SupiOptions) {
     }
 
     if (opts.customInstall) {
-      const {stdout, stderr} = await execPromise(opts.customInstall, {maxBuffer: 10 * 1024 * 1024})
+      const [stdout, stderr] = await execPromise(opts.customInstall, {maxBuffer: 10 * 1024 * 1024})
       logger.info(stdout)
       await rebuild(opts)
     } else {
